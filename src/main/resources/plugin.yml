@@ -1,0 +1,24 @@
+name: SimpleBack
+version: '0.0.0'
+main: simplexity.simpleback.SimpleBack
+api-version: '1.20'
+commands:
+  back:
+    permission: back.use
+    description: teleport back to the last location you teleported to
+  backreload:
+    permission: back.reload
+    description: reload the config
+permissions:
+  back.use:
+    default: op
+    description: use the back command
+  back.bypass.delay:
+    default: op
+    description: Bypass the teleport delay completely
+  back.bypass.movement:
+    default: op
+    description: Bypass the 'no movement' requirement of the teleport delay
+  back.reload:
+    default: op
+    description: reload the config

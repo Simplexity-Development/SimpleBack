@@ -1,0 +1,13 @@
+# Teleport reasons, https://jd.papermc.io/paper/1.21.4/org/bukkit/event/player/PlayerTeleportEvent.TeleportCause.html
+teleport-causes:
+  - PLUGIN
+  - COMMAND
+# 0 or -1 to disable
+teleport-delay:
+  delay-in-seconds: 5
+  cancel-tp-on-move: true
+  buffer-distance-in-blocks: 0.5
+# 0 or -1 to disable
+teleport-cooldown:
+  length-in-seconds: 30
+blacklisted-worlds: []

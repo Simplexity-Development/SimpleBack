@@ -1,4 +1,4 @@
-package simplexity.simpleback.util;
+package simplexity.simpleback.handlers;
 
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
@@ -14,9 +14,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class TeleportHandler {
-    private static final HashMap<UUID, BukkitTask> currentTasks = new HashMap<>();
+    public static final HashMap<UUID, BukkitTask> currentTasks = new HashMap<>();
     public static final HashMap<UUID, Location> startingLocations = new HashMap<>();
-    public static final HashMap<UUID, BukkitTask> cacheClearTasks = new HashMap<>();
 
     public static void delayTeleport(@NotNull Player player) {
         if (player.hasPermission(Permissions.DELAY_BYPASS)) {
@@ -26,19 +25,21 @@ public class TeleportHandler {
         if (!player.hasPermission(Permissions.MOVEMENT_BYPASS)) {
             startingLocations.put(player.getUniqueId(), player.getLocation());
         }
+        UUID uuid = player.getUniqueId();
         int delay = ConfigHandler.getInstance().getDelayInSeconds();
         player.sendRichMessage(Message.TELEPORT_PLEASE_WAIT.getMessage(),
                 Placeholder.unparsed("value", String.valueOf(delay)));
         BukkitTask task = Bukkit.getScheduler().runTaskLater(SimpleBack.getInstance(), () -> {
             teleport(player);
-        },  delay * 20L);
-        currentTasks.put(player.getUniqueId(), task);
+        }, delay * 20L);
+        currentTasks.put(uuid, task);
     }
 
     public static void teleport(@NotNull Player player) {
         Location location = SimpleBack.getInstance().getBackLocations().get(player.getUniqueId());
         player.sendMessage(MessageHandler.getParsedLocationMessage(Message.TELEPORT_SUCCESSFUL, location));
         player.teleportAsync(location);
+        CooldownHandler.addToCooldown(player);
         UUID uuid = player.getUniqueId();
         startingLocations.remove(uuid);
         currentTasks.remove(uuid);
@@ -51,23 +52,12 @@ public class TeleportHandler {
         player.sendRichMessage(Message.TELEPORT_CANCELLED.getMessage());
     }
 
-    public static void removeCache(@NotNull Player player) {
+    public static boolean blacklistedWorld(@NotNull Player player) {
         UUID uuid = player.getUniqueId();
-        BukkitTask task = Bukkit.getScheduler().runTaskLater(SimpleBack.getInstance(), () -> {
-            currentTasks.get(uuid).cancel();
-            currentTasks.remove(uuid);
-            startingLocations.remove(uuid);
-            SimpleBack.getInstance().getBackLocations().remove(uuid);
-        },  ConfigHandler.getInstance().getCacheClearTimeInSeconds() * 20L);
-        cacheClearTasks.put(uuid, task);
+        if (player.hasPermission(Permissions.WORLD_BYPASS)) return false;
+        Location location = SimpleBack.getInstance().getBackLocations().get(uuid);
+        if (location == null) return false;
+        UUID worldUUID = location.getWorld().getUID();
+        return ConfigHandler.getInstance().getBlacklistedWorlds().contains(worldUUID);
     }
-
-    public static void cancelCacheClear(@NotNull UUID uuid) {
-        BukkitTask task = cacheClearTasks.get(uuid);
-        if (task != null) {
-            task.cancel();
-        }
-    }
-
-
 }

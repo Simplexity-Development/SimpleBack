@@ -1,4 +1,4 @@
-package simplexity.simpleback.util;
+package simplexity.simpleback.handlers;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -27,5 +27,25 @@ public class MessageHandler {
                 Placeholder.component("world", worldName));
     }
 
-
+    public static Component getParsedTimeMessage(Message message, long millis) {
+        long seconds = (millis / 1000) % 60;
+        long minutes = (millis / (1000 * 60)) % 60;
+        long hours = millis / (1000 * 60 * 60);
+        Component hoursComponent = Component.empty();
+        Component minutesComponent = Component.empty();
+        Component secondsComponent = Component.empty();
+        if (hours > 0) hoursComponent = miniMessage.deserialize(
+                Message.INSERT_HOUR.getMessage(),
+                Placeholder.unparsed("hour", String.valueOf(hours)));
+        if (minutes > 0) minutesComponent = miniMessage.deserialize(
+                Message.INSERT_MINUTE.getMessage(),
+                Placeholder.unparsed("minute", String.valueOf(minutes)));
+        if (seconds > 0) secondsComponent = miniMessage.deserialize(
+                Message.INSERT_SECOND.getMessage(),
+                Placeholder.unparsed("second", String.valueOf(seconds)));
+        return miniMessage.deserialize(message.getMessage(),
+                Placeholder.component("hour", hoursComponent),
+                Placeholder.component("minute", minutesComponent),
+                Placeholder.component("second", secondsComponent));
+    }
 }

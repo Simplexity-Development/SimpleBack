@@ -8,7 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import simplexity.simpleback.config.ConfigHandler;
 import simplexity.simpleback.config.Message;
 import simplexity.simpleback.SimpleBack;
-import simplexity.simpleback.util.TeleportHandler;
+import simplexity.simpleback.handlers.CooldownHandler;
+import simplexity.simpleback.handlers.MessageHandler;
+import simplexity.simpleback.handlers.TeleportHandler;
 
 public class Back implements CommandExecutor {
     @Override
@@ -21,12 +23,20 @@ public class Back implements CommandExecutor {
             player.sendRichMessage(Message.ERROR_NO_BACK_LOCATIONS.getMessage());
             return true;
         }
+        if (!CooldownHandler.cooldownExpired(player)) {
+            player.sendMessage(MessageHandler.getParsedTimeMessage(Message.ERROR_COOLDOWN,
+                    CooldownHandler.getLeftoverCooldownTime(player.getUniqueId())));
+            return false;
+        }
+        if (TeleportHandler.blacklistedWorld(player)) {
+            player.sendRichMessage(Message.ERROR_BLACKLISTED_WORLD.getMessage());
+            return false;
+        }
         if (ConfigHandler.getInstance().isTeleportDelay()) {
             TeleportHandler.delayTeleport(player);
             return true;
         }
         TeleportHandler.teleport(player);
-        System.out.println("TELEPORTED FROM COMMAND");
         return true;
     }
 }

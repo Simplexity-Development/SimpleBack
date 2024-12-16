@@ -7,7 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import simplexity.simpleback.config.ConfigHandler;
-import simplexity.simpleback.util.TeleportHandler;
+import simplexity.simpleback.handlers.TeleportHandler;
 
 import java.util.UUID;
 

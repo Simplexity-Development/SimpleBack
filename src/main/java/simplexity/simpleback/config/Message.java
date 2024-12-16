@@ -14,8 +14,8 @@ public enum Message {
     ERROR_MUST_BE_PLAYER("error.must-be-player", "<red>Sorry, you must be a player to run this command!</red>"),
     ERROR_NO_BACK_LOCATIONS("error.no-back-locations", "<gray>No back locations found!</gray>"),
     ERROR_COOLDOWN("error.command-cooldown", "<gray>Sorry, that command is on cooldown for: [<hour><minute><second>]!</gray>"),
-    PLUGIN_RELOADED("plugin.reloaded", "<gold>SimpleBack plugin reloaded</gold>"),
-    ;
+    ERROR_BLACKLISTED_WORLD("error.blacklisted-world", "<red>Sorry, the world you are trying to return to is blacklisted!</red>"),
+    PLUGIN_RELOADED("plugin.reloaded", "<gold>SimpleBack plugin reloaded</gold>");
     private final String path;
     private String message;
 

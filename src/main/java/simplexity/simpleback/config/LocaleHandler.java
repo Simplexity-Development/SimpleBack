@@ -1,8 +1,9 @@
-package simplexity.simpleback;
+package simplexity.simpleback.config;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import simplexity.simpleback.SimpleBack;
 
 import java.io.File;
 import java.io.IOException;

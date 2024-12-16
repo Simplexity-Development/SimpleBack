@@ -13,12 +13,26 @@ permissions:
   back.use:
     default: op
     description: use the back command
+  back.bypass:
+    default: op
+    description: Bypass any restrictions set in the config
+    children:
+      back.bypass.delay: true
+      back.bypass.movement: true
+      back.bypass.worlds: true
+      back.bypass.cooldown: true
   back.bypass.delay:
     default: op
     description: Bypass the teleport delay completely
   back.bypass.movement:
     default: op
     description: Bypass the 'no movement' requirement of the teleport delay
+  back.bypass.worlds:
+    default: op
+    description: Bypass the worlds blacklist for /back
+  back.bypass.cooldown:
+    default: op
+    description: Bypass the cooldown on /back
   back.reload:
     default: op
     description: reload the config

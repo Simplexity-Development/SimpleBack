@@ -1,9 +1,11 @@
-package simplexity.simpleback;
+package simplexity.simpleback.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import simplexity.simpleback.config.ConfigHandler;
+import simplexity.simpleback.config.Message;
 
 public class BackReload implements CommandExecutor {
     @Override

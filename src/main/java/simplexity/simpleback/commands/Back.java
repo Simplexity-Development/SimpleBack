@@ -1,11 +1,14 @@
-package simplexity.simpleback;
+package simplexity.simpleback.commands;
 
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import simplexity.simpleback.config.ConfigHandler;
+import simplexity.simpleback.config.Message;
+import simplexity.simpleback.SimpleBack;
+import simplexity.simpleback.util.TeleportHandler;
 
 public class Back implements CommandExecutor {
     @Override

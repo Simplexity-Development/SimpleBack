@@ -1,9 +1,10 @@
-package simplexity.simpleback;
+package simplexity.simpleback.config;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import simplexity.simpleback.SimpleBack;
 
 import java.util.HashSet;
 import java.util.List;
@@ -22,7 +23,7 @@ public class ConfigHandler {
     private final HashSet<PlayerTeleportEvent.TeleportCause> trackedTeleportCauses = new HashSet<>();
     private boolean teleportDelay, cancelTeleportOnMove, teleportCooldown;
     private double movementBuffer;
-    private int delayInSeconds, cooldownInSeconds;
+    private int delayInSeconds, cooldownInSeconds, cacheClearTimeInSeconds;
 
     public void loadConfigValues(){
         SimpleBack.getInstance().reloadConfig();
@@ -34,6 +35,7 @@ public class ConfigHandler {
         movementBuffer = config.getDouble("teleport-delay.buffer-distance-in-blocks", 0.5);
         cooldownInSeconds = config.getInt("teleport-cooldown.length-in-seconds", 10);
         teleportCooldown = config.getBoolean("teleport-cooldown.enabled", false);
+        cacheClearTimeInSeconds = config.getInt("cache-clear-time-in-seconds", 30);
         populateTeleportCauses(config);
         populateBlacklistedWorlds(config);
     }
@@ -104,5 +106,9 @@ public class ConfigHandler {
 
     public int getDelayInSeconds() {
         return delayInSeconds;
+    }
+
+    public int getCacheClearTimeInSeconds() {
+        return cacheClearTimeInSeconds;
     }
 }

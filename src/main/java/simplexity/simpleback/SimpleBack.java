@@ -3,6 +3,13 @@ package simplexity.simpleback;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
+import simplexity.simpleback.commands.Back;
+import simplexity.simpleback.commands.BackReload;
+import simplexity.simpleback.config.ConfigHandler;
+import simplexity.simpleback.listeners.JoinListener;
+import simplexity.simpleback.listeners.LeaveListener;
+import simplexity.simpleback.listeners.MovementListener;
+import simplexity.simpleback.listeners.TeleportListener;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -21,6 +28,8 @@ public final class SimpleBack extends JavaPlugin {
         ConfigHandler.getInstance().loadConfigValues();
         this.getServer().getPluginManager().registerEvents(new TeleportListener(), this);
         this.getServer().getPluginManager().registerEvents(new MovementListener(), this);
+        this.getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        this.getServer().getPluginManager().registerEvents(new LeaveListener(), this);
         this.getCommand("back").setExecutor(new Back());
         this.getCommand("backreload").setExecutor(new BackReload());
         // Plugin startup logic

@@ -1,4 +1,4 @@
-package simplexity.simpleback;
+package simplexity.simpleback.config;
 
 public enum Message {
     TELEPORT_PLEASE_WAIT("message.teleport-delay", "<green>Teleporting! Please wait <value> seconds!</green>"),

@@ -12,4 +12,5 @@ teleport-delay:
 teleport-cooldown:
   enabled: false
   length-in-seconds: 30
+cache-clear-time-in-seconds: 30
 blacklisted-worlds: []

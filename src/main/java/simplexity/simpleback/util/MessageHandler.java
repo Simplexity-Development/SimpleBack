@@ -1,9 +1,11 @@
-package simplexity.simpleback;
+package simplexity.simpleback.util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Location;
+import simplexity.simpleback.SimpleBack;
+import simplexity.simpleback.config.Message;
 
 public class MessageHandler {
 

@@ -1,4 +1,4 @@
-package simplexity.simpleback;
+package simplexity.simpleback.listeners;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import simplexity.simpleback.SimpleBack;
 
 public class TeleportListener implements Listener {
     @EventHandler(priority= EventPriority.MONITOR)

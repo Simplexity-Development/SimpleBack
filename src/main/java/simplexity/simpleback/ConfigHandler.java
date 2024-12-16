@@ -16,7 +16,6 @@ public class ConfigHandler {
         if (instance == null) instance = new ConfigHandler();
         return instance;
     }
-    private ConfigHandler() {}
     private final Logger logger = SimpleBack.getInstance().getLogger();
 
     private final HashSet<UUID> blacklistedWorlds = new HashSet<>();
@@ -25,18 +24,16 @@ public class ConfigHandler {
     private double movementBuffer;
     private int delayInSeconds, cooldownInSeconds;
 
-
-
     public void loadConfigValues(){
         SimpleBack.getInstance().reloadConfig();
         LocaleHandler.getInstance().reloadLocale();
         FileConfiguration config = SimpleBack.getInstance().getConfig();
+        teleportDelay = config.getBoolean("teleport-delay.enabled", false);
         delayInSeconds = config.getInt("teleport-delay.delay-in-seconds", 5);
-        if (delayInSeconds <= 0) teleportDelay = false;
         cancelTeleportOnMove = config.getBoolean("teleport-delay.cancel-tp-on-move", true);
         movementBuffer = config.getDouble("teleport-delay.buffer-distance-in-blocks", 0.5);
         cooldownInSeconds = config.getInt("teleport-cooldown.length-in-seconds", 10);
-        if (cooldownInSeconds <= 0) teleportCooldown = false;
+        teleportCooldown = config.getBoolean("teleport-cooldown.enabled", false);
         populateTeleportCauses(config);
         populateBlacklistedWorlds(config);
     }

@@ -1,5 +1,6 @@
 package simplexity.simpleback;
 
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -20,9 +21,12 @@ public class TeleportHandler {
         if (!player.hasPermission(Permissions.MOVEMENT_BYPASS)) {
             startingLocations.put(player, player.getLocation());
         }
+        int delay = ConfigHandler.getInstance().getDelayInSeconds();
+        player.sendRichMessage(Message.TELEPORT_PLEASE_WAIT.getMessage(),
+                Placeholder.unparsed("value", String.valueOf(delay)));
         BukkitTask task = Bukkit.getScheduler().runTaskLater(SimpleBack.getInstance(), () -> {
             teleport(player);
-        }, ConfigHandler.getInstance().getDelayInSeconds() * 20L);
+        },  delay * 20L);
         currentTasks.put(player, task);
     }
 
@@ -35,7 +39,7 @@ public class TeleportHandler {
     }
 
     public static void cancelTeleport(@NotNull Player player) {
-        currentTasks.remove(player);
+        currentTasks.get(player).cancel();
         startingLocations.remove(player);
         player.sendRichMessage(Message.TELEPORT_CANCELLED.getMessage());
     }

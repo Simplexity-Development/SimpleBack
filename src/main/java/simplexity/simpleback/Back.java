@@ -23,6 +23,7 @@ public class Back implements CommandExecutor {
             return true;
         }
         TeleportHandler.teleport(player);
+        System.out.println("TELEPORTED FROM COMMAND");
         return true;
     }
 }

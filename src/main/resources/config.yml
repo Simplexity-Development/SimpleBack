@@ -4,10 +4,12 @@ teleport-causes:
   - COMMAND
 # 0 or -1 to disable
 teleport-delay:
+  enabled: false
   delay-in-seconds: 5
   cancel-tp-on-move: true
   buffer-distance-in-blocks: 0.5
 # 0 or -1 to disable
 teleport-cooldown:
+  enabled: false
   length-in-seconds: 30
 blacklisted-worlds: []

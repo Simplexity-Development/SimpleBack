@@ -11,7 +11,7 @@ commands:
     description: reload the config
 permissions:
   back.use:
-    default: op
+    default: true
     description: use the back command
   back.bypass:
     default: op

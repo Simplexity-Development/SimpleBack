@@ -1,5 +1,5 @@
 name: SimpleBack
-version: '0.0.0'
+version: '${project.version}'
 main: simplexity.simpleback.SimpleBack
 api-version: '1.20'
 commands:

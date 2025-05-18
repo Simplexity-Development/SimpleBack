@@ -2,6 +2,8 @@
 teleport-causes:
   - PLUGIN
   - COMMAND
+# Allow /back to track death locations
+allow-back-on-death: false
 teleport-delay:
   enabled: false
   delay-in-seconds: 5

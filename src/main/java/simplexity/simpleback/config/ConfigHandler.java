@@ -21,7 +21,7 @@ public class ConfigHandler {
 
     private final HashSet<UUID> blacklistedWorlds = new HashSet<>();
     private final HashSet<PlayerTeleportEvent.TeleportCause> trackedTeleportCauses = new HashSet<>();
-    private boolean teleportDelay, cancelTeleportOnMove, teleportCooldown;
+    private boolean allowBackOnDeath, teleportDelay, cancelTeleportOnMove, teleportCooldown;
     private double movementBuffer;
     private int delayInSeconds, cooldownInSeconds, cacheClearTimeInSeconds;
 
@@ -29,6 +29,7 @@ public class ConfigHandler {
         SimpleBack.getInstance().reloadConfig();
         LocaleHandler.getInstance().reloadLocale();
         FileConfiguration config = SimpleBack.getInstance().getConfig();
+        allowBackOnDeath = config.getBoolean("allow-back-on-death", false);
         teleportDelay = config.getBoolean("teleport-delay.enabled", false);
         delayInSeconds = config.getInt("teleport-delay.delay-in-seconds", 5);
         cancelTeleportOnMove = config.getBoolean("teleport-delay.cancel-tp-on-move", true);
@@ -111,4 +112,6 @@ public class ConfigHandler {
     public int getCacheClearTimeInSeconds() {
         return cacheClearTimeInSeconds;
     }
+
+    public boolean isAllowBackOnDeath() { return allowBackOnDeath; }
 }

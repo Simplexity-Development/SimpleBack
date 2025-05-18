@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import simplexity.simpleback.commands.Back;
 import simplexity.simpleback.commands.BackReload;
 import simplexity.simpleback.config.ConfigHandler;
+import simplexity.simpleback.listeners.DeathListener;
 import simplexity.simpleback.listeners.JoinListener;
 import simplexity.simpleback.listeners.LeaveListener;
 import simplexity.simpleback.listeners.MovementListener;
@@ -30,7 +31,10 @@ public final class SimpleBack extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new MovementListener(), this);
         this.getServer().getPluginManager().registerEvents(new JoinListener(), this);
         this.getServer().getPluginManager().registerEvents(new LeaveListener(), this);
+        this.getServer().getPluginManager().registerEvents(new DeathListener(), this);
+        //noinspection DataFlowIssue
         this.getCommand("back").setExecutor(new Back());
+        //noinspection DataFlowIssue
         this.getCommand("backreload").setExecutor(new BackReload());
         // Plugin startup logic
 

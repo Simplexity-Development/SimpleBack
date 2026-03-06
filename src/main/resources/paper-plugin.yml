@@ -1,0 +1,5 @@
+name: SimpleBack
+version: '${project.version}'
+main: simplexity.simpleback.SimpleBack
+api-version: '1.21.5'
+website: "https://github.com/Simplexity-Development/SimpleBack"

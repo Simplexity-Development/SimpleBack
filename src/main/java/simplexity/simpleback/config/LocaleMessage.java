@@ -1,6 +1,6 @@
 package simplexity.simpleback.config;
 
-public enum Message {
+public enum LocaleMessage {
     TELEPORT_PLEASE_WAIT("message.teleport-delay", "<green>Teleporting! Please wait <value> seconds!</green>"),
     TELEPORT_SUCCESSFUL("message.teleport-successful", "<green>Successfully teleported to <x-loc>, <y-loc>, <z-loc> in <world>!"),
     TELEPORT_CANCELLED("message.teleport-cancelled", "<red>Teleport Cancelled</red>"),
@@ -12,6 +12,8 @@ public enum Message {
     INSERT_MINUTE("insert.minute", "<yellow><minute>m </yellow>"),
     INSERT_SECOND("insert.second", "<yellow><second>s</yellow>"),
     ERROR_MUST_BE_PLAYER("error.must-be-player", "<red>Sorry, you must be a player to run this command!</red>"),
+    ERROR_MUST_PROVIDE_PLAYER("error.must-provide-player", "<red>You must provide a valid player for this command!</red>"),
+    ERROR_PLAYER_INVALID("error.player-invalid", "<red>Player not found</red>"),
     ERROR_NO_BACK_LOCATIONS("error.no-back-locations", "<gray>No back locations found!</gray>"),
     ERROR_COOLDOWN("error.command-cooldown", "<gray>Sorry, that command is on cooldown for: [<hour><minute><second>]!</gray>"),
     ERROR_BLACKLISTED_WORLD("error.blacklisted-world", "<red>Sorry, the world you are trying to return to is blacklisted!</red>"),
@@ -19,7 +21,7 @@ public enum Message {
     private final String path;
     private String message;
 
-    Message(String path, String message) {
+    LocaleMessage(String path, String message) {
         this.path = path;
         this.message = message;
     }

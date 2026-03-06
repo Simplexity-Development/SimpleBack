@@ -1,19 +1,24 @@
 package simplexity.simpleback.commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
 import simplexity.simpleback.config.ConfigHandler;
-import simplexity.simpleback.config.Message;
-import simplexity.simpleback.handlers.CacheHandler;
+import simplexity.simpleback.config.LocaleMessage;
+import simplexity.simpleback.handlers.BackPermission;
 
-public class BackReload implements CommandExecutor {
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        CacheHandler.clearCache();
-        ConfigHandler.getInstance().loadConfigValues();
-        sender.sendRichMessage(Message.PLUGIN_RELOADED.getMessage());
-        return true;
+@SuppressWarnings("UnstableApiUsage")
+public class BackReload {
+
+    public static LiteralArgumentBuilder<CommandSourceStack> createCommand() {
+        return Commands.literal("backreload")
+                .requires(css -> css.getSender().hasPermission(BackPermission.BACK_RELOAD.getPermission()))
+                .executes(css -> {
+                    ConfigHandler.getInstance().loadConfigValues();
+                    css.getSource().getSender().sendRichMessage(LocaleMessage.PLUGIN_RELOADED.getMessage());
+                    return Command.SINGLE_SUCCESS;
+                });
     }
+
 }

@@ -1,42 +1,77 @@
 package simplexity.simpleback.commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
+import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import simplexity.simpleback.config.ConfigHandler;
-import simplexity.simpleback.config.Message;
 import simplexity.simpleback.SimpleBack;
+import simplexity.simpleback.config.ConfigHandler;
 import simplexity.simpleback.handlers.CooldownHandler;
-import simplexity.simpleback.handlers.MessageHandler;
+import simplexity.simpleback.handlers.BackPermission;
 import simplexity.simpleback.handlers.TeleportHandler;
 
-public class Back implements CommandExecutor {
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (!(sender instanceof Player player)) {
-            sender.sendRichMessage(Message.ERROR_MUST_BE_PLAYER.getMessage());
-            return true;
-        }
-        if (!SimpleBack.getInstance().getBackLocations().containsKey(player.getUniqueId())) {
-            player.sendRichMessage(Message.ERROR_NO_BACK_LOCATIONS.getMessage());
-            return true;
-        }
-        if (!CooldownHandler.cooldownExpired(player)) {
-            player.sendMessage(MessageHandler.getParsedTimeMessage(Message.ERROR_COOLDOWN,
-                    CooldownHandler.getLeftoverCooldownTime(player.getUniqueId())));
-            return false;
-        }
-        if (TeleportHandler.blacklistedWorld(player)) {
-            player.sendRichMessage(Message.ERROR_BLACKLISTED_WORLD.getMessage());
-            return false;
-        }
+import java.util.List;
+
+@SuppressWarnings({"UnstableApiUsage", "SameReturnValue"})
+public class Back {
+
+    public static LiteralArgumentBuilder<CommandSourceStack> createCommand() {
+        return Commands.literal("back")
+                .requires(Back::canExecute)
+                .executes(Back::execute)
+                .then(Commands.argument("player", ArgumentTypes.player())
+                        .requires(Back::canExecuteWithArg)
+                        .executes(Back::executeWithArg));
+    }
+
+
+    private static int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        if (!(ctx.getSource().getSender() instanceof Player player)) throw Exceptions.MUST_PROVIDE_PLAYER.create();
+        if (!SimpleBack.getInstance().getBackLocations().containsKey(player.getUniqueId()))
+            throw Exceptions.NO_BACK_LOCATIONS.create();
+        if (!CooldownHandler.cooldownExpired(player))
+            throw Exceptions.COOLDOWN_NOT_FINISHED.create(CooldownHandler.getLeftoverCooldownTime(player.getUniqueId()));
+        if (TeleportHandler.blacklistedWorld(player)) throw Exceptions.BLACKLISTED_WORLD.create();
         if (ConfigHandler.getInstance().isTeleportDelay()) {
             TeleportHandler.delayTeleport(player);
-            return true;
+            return Command.SINGLE_SUCCESS;
         }
         TeleportHandler.teleport(player);
-        return true;
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int executeWithArg(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        PlayerSelectorArgumentResolver argResolver = ctx.getArgument("player", PlayerSelectorArgumentResolver.class);
+        List<Player> playerList = argResolver.resolve(ctx.getSource());
+        if (playerList.isEmpty()) throw Exceptions.PLAYER_NOT_FOUND.create();
+        Player player = playerList.getFirst();
+        if (!SimpleBack.getInstance().getBackLocations().containsKey(player.getUniqueId()))
+            throw Exceptions.NO_BACK_LOCATIONS.create();
+        if (!CooldownHandler.cooldownExpired(player))
+            throw Exceptions.COOLDOWN_NOT_FINISHED.create(CooldownHandler.getLeftoverCooldownTime(player.getUniqueId()));
+        if (TeleportHandler.blacklistedWorld(player)) throw Exceptions.BLACKLISTED_WORLD.create();
+        if (ConfigHandler.getInstance().isTeleportDelay()) {
+            TeleportHandler.delayTeleport(player);
+            return Command.SINGLE_SUCCESS;
+        }
+        TeleportHandler.teleport(player);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static boolean canExecute(CommandSourceStack css) {
+        if (css.getSender() instanceof Player player) {
+            return player.hasPermission(BackPermission.BACK_USE.getPermission());
+        }
+        return css.getSender().hasPermission(BackPermission.FORCE_BACK.getPermission());
+    }
+
+    private static boolean canExecuteWithArg(CommandSourceStack css) {
+        if (css.getSender() instanceof Player) return false;
+        return css.getSender().hasPermission(BackPermission.FORCE_BACK.getPermission());
     }
 }

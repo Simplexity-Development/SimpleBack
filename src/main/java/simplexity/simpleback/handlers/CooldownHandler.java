@@ -7,12 +7,13 @@ import simplexity.simpleback.config.ConfigHandler;
 import java.util.HashMap;
 import java.util.UUID;
 
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class CooldownHandler {
     public static final HashMap<UUID, Long> cooldownTime = new HashMap<>();
 
     static void addToCooldown(@NotNull Player player) {
         if (!ConfigHandler.getInstance().isTeleportCooldown()) return;
-        if (player.hasPermission(Permissions.COOLDOWN_BYPASS)) return;
+        if (player.hasPermission(BackPermission.COOLDOWN_BYPASS.getPermission())) return;
         UUID uuid = player.getUniqueId();
         Long cooldownTimeMilli = System.currentTimeMillis() + (ConfigHandler.getInstance().getCooldownInSeconds() * 1000L);
         cooldownTime.put(uuid, cooldownTimeMilli);
@@ -21,7 +22,7 @@ public class CooldownHandler {
     public static boolean cooldownExpired(@NotNull Player player) {
         UUID uuid = player.getUniqueId();
         if (!cooldownTime.containsKey(uuid)) return true;
-        if (player.hasPermission(Permissions.COOLDOWN_BYPASS)) return true;
+        if (player.hasPermission(BackPermission.COOLDOWN_BYPASS.getPermission())) return true;
         long leftoverTime = getLeftoverCooldownTime(uuid);
         return leftoverTime <= 0;
     }
